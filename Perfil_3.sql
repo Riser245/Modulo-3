@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS EduRicssrdoManage;
+DROP DATABASE IF EXISTS EduManage;
 
-CREATE DATABASE EduRicssrdoManage;
+CREATE DATABASE EduManage;
 
-USE EduRicssrdoManage;
+USE EduManage;
 
 CREATE TABLE tb_profesores(
 id_profesor CHAR(15) PRIMARY KEY DEFAULT (UUID()),
