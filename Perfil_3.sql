@@ -179,7 +179,6 @@ CALL insertar_calificaciones(88.25, '2024-02-28')
 SELECT*FROM tb_calificaciones
 
 
-[11:49] REBECA PATRICIA MÓNICO ALFARO
 DELIMITER //
  
 CREATE TRIGGER actualizar_cupos_despues_inscripcion
