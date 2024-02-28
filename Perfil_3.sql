@@ -142,7 +142,37 @@ CALL insertar_inscripciones( 15, 15, '2024-02-28', 'Activo');
 
 SELECT*FROM tb_inscripciones
 
+DELIMITER //
+ 
+CREATE TRIGGER actualizar_cupos_despues_inscripcion
 
+AFTER INSERT ON tb_inscripciones
+
+FOR EACH ROW
+
+BEGIN
+
+    DECLARE cupos_ocupados INT;
+
+    -- Obtener la cantidad de cupos ocupados para la materia de la inscripción --
+
+    SELECT COUNT(*) INTO cupos_ocupados FROM tb_inscripciones WHERE id_materia = NEW.id_materia AND estado = 'Activo';
+
+    -- Actualizar los cupos disponibles en la tabla tb_materias --
+
+    UPDATE tb_materias
+
+    SET cupos = (SELECT cupos - cupos_ocupados FROM tb_materias WHERE id_materia = NEW.id_materia)
+
+    WHERE id_materia = NEW.id_materia;
+
+END;
+
+//
+ 
+DELIMITER ;
+
+ 
 
 CREATE TABLE tb_calificaciones(
 id_calificacion CHAR(15) PRIMARY KEY DEFAULT (UUID()),
@@ -179,34 +209,5 @@ CALL insertar_calificaciones(88.25, '2024-02-28')
 SELECT*FROM tb_calificaciones
 
 
-DELIMITER //
- 
-CREATE TRIGGER actualizar_cupos_despues_inscripcion
-
-AFTER INSERT ON tb_inscripciones
-
-FOR EACH ROW
-
-BEGIN
-
-    DECLARE cupos_ocupados INT;
-
-    -- Obtener la cantidad de cupos ocupados para la materia de la inscripción --
-
-    SELECT COUNT(*) INTO cupos_ocupados FROM tb_inscripciones WHERE id_materia = NEW.id_materia AND estado = 'Activo';
-
-    -- Actualizar los cupos disponibles en la tabla tb_materias --
-
-    UPDATE tb_materias
-
-    SET cupos = (SELECT cupos - cupos_ocupados FROM tb_materias WHERE id_materia = NEW.id_materia)
-
-    WHERE id_materia = NEW.id_materia;
-
-END;
-
-//
- 
-DELIMITER ;
 
 
